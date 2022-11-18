@@ -4,7 +4,26 @@ from pymongo import MongoClient
 
 db = None
 
+def printMenu():
+    print("""
+1 - Search For Artists
+2 - Search for authors
+3 - List the venues
+4 - Add an article
+Enter a choice and press enter:""")
+
+def getInput(message, errMessage):
+    while True:
+        toRet = input(message)
+        if (toRet == ""):
+            print(errMessage)
+        else:
+            return toRet
+
+    return
+
 def main(args):
+    ### CONNECTION AREA ###
     if len(args) < 2:
         print("Not enough command line arguments")
     
@@ -20,6 +39,22 @@ def main(args):
 
     collist = db.list_collection_names()
     print(collist)
+
+
+    ### MENU AREA ###
+    printMenu()
+    while True:
+        userInput = int(getInput("", "Must make a selection"))
+        if userInput == 1:
+            return True
+        elif userInput == 3:
+            return True
+        elif userInput == 3:
+            return True
+        elif userInput == 4:
+            return False
+        else:
+            print("Refer to menu")
 
     
 
