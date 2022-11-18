@@ -1,8 +1,8 @@
 import sys
 import json
 from pymongo import MongoClient
-
-db = None
+import authorSearch
+import venueSearch
 
 def printMenu():
     print("""
@@ -10,6 +10,7 @@ def printMenu():
 2 - Search for authors
 3 - List the venues
 4 - Add an article
+5 - Exit
 Enter a choice and press enter:""")
 
 def getInput(message, errMessage):
@@ -34,12 +35,8 @@ def main(args):
     client = MongoClient(host)
 
     # Create or open the 291db database on server.
-    global db 
     db = client["291db"]
-
-    collist = db.list_collection_names()
-    print(collist)
-
+    collection = db['dblp']
 
     ### MENU AREA ###
     printMenu()
@@ -47,12 +44,21 @@ def main(args):
         userInput = int(getInput("", "Must make a selection"))
         if userInput == 1:
             return True
+            
+        elif userInput == 2:
+            keyword = getInput("Author Name: ", "Must make a selection")
+            authors = authorSearch.findAuthors(keyword, collection)
+            print (authors)
+           
         elif userInput == 3:
-            return True
-        elif userInput == 3:
-            return True
+            n = int(getInput("Number of Venues: ", "Must make a selection"))
+            venues = venueSearch.findVenues(n, collection)
+            print(venues)
+           
         elif userInput == 4:
-            return False
+            return True
+        elif userInput == 5:
+            return True
         else:
             print("Refer to menu")
 
