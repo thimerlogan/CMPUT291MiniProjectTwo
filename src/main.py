@@ -49,9 +49,9 @@ def main(args):
             keywords = getInput("Article search keywords: ", "Must make a selection")
             articles = articleSearch.searchForArticles(keywords.split(), collection)
 
-            if len(list(articles.clone())) < 1:
+            '''if len(list(articles.clone())) < 1:
                 print("\nThere were no matching articles")
-                continue
+                continue'''
 
             articlesDict = dict((i, article) for i, article in enumerate(articles, 1))
             print(f"\nThere were {articlesDict.__len__()} search results:")   
@@ -66,7 +66,7 @@ def main(args):
                 selection = int(getInput("Select an article: ", "Must make a selection"))
             
             if selection == (len(articlesDict) + 1):
-                return
+                continue
 
             articleSearch.printArticle(articlesDict[selection], collection)       
 

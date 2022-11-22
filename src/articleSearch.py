@@ -1,16 +1,15 @@
 from pymongo.collection import Collection
 
 def searchForArticles(keywords:list, collection:Collection):
-    regex = "^"
+    #regex = "^"
     words = ""
     for keyword in keywords:
         words += f"\"{keyword}\" "
-        regex += f"(?=.*{keyword})"
-
-    #results = collection.find({"$or": [{"authors": { "$elemMatch": { "$regex": regex, "$options": 'i' }}}, {"title": { "$regex": regex, "$options": 'i' }}, 
-    #                        {"abstract": { "$regex": regex, "$options": 'i' }}, {"venue": { "$regex": regex, "$options": 'i' }}]})
-    #results = collection.find({"$text": {"$search": ' '.join(map(str, keywords))}})
+        #regex += f"(?=.*{keyword})"
+    
+    #results = collection.find({"$text": {"$search": words}})
     results = collection.find({"$text": {"$search": words}})
+
     return results
 
 def getArticles(ids:list, collection:Collection):
@@ -19,26 +18,25 @@ def getArticles(ids:list, collection:Collection):
     print(f"results: {len(list(results.clone()))}")
 
     return results
+    
 
 def printArticle(article, collection:Collection):
-    print(f"\nid: {article['id']}")
-    print(f"title: {article['title']}")
-    print(f"year: {article['year']}")
-    print(f"venue: {article['venue']}")
-    print(f"# of citations: {article['n_citation']}")
-    print(f"authors: {', '.join(map(str, article['authors']))}")
+    print(f"\nid: {getArticleKey(article, 'id')}")
+    print(f"title: {getArticleKey(article, 'title')}")
+    print(f"year: {getArticleKey(article, 'year')}")
+    print(f"venue: {getArticleKey(article, 'venue')}")
+    print(f"# of citations: {getArticleKey(article, 'n_citation')}")
+    print(f"authors: {', '.join(map(str, getArticleKey(article, 'authors')))}")
+    print(f"abstract: {getArticleKey(article, 'abstract')}")
 
-    # some don't have an abstract key
-    try:
-        print(f"abstract: {article['abstract']}")
-    except KeyError:
-        print("abstract: ")
+    if getArticleKey(article, 'references') == 'None':
+        print("references: None")
+    else:
+        print(f"references: {', '.join(map(str, getArticleKey(article, 'references')))}")
+
     
-    # some don't have an abstract key
+def getArticleKey(article, key:str):
     try:
-        print(f"references: {', '.join(map(str, article['references']))}")
-
+        return article[key]
     except KeyError:
-        print("references: ")
-    
-
+        return 'None'
