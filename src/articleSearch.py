@@ -7,15 +7,12 @@ def searchForArticles(keywords:list, collection:Collection):
         words += f"\"{keyword}\" "
         #regex += f"(?=.*{keyword})"
     
-    #results = collection.find({"$text": {"$search": words}})
     results = collection.find({"$text": {"$search": words}})
 
     return results
 
-def getArticles(ids:list, collection:Collection):
-    print(f"ids: {ids}")
-    results = collection.find({"id": {"$in": ids}})
-    print(f"results: {len(list(results.clone()))}")
+def getArticlesThatReference(id, collection:Collection):
+    results = collection.find({"references": id})
 
     return results
     
@@ -33,6 +30,16 @@ def printArticle(article, collection:Collection):
         print("references: None")
     else:
         print(f"references: {', '.join(map(str, getArticleKey(article, 'references')))}")
+    
+    articleReferences = getArticlesThatReference(getArticleKey(article, 'id'), collection)
+    print("Articles that reference this one: ")
+    if len(list(articleReferences.clone())) < 1:
+        print("None")
+        return
+    
+    print("\t| id | title | year")
+    for article in articleReferences:
+        print(f"\t{article['id']} | {article['title']} | {article['year']}")
 
     
 def getArticleKey(article, key:str):
