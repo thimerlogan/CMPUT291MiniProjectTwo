@@ -11,13 +11,14 @@ def main(args):
     port = args[2]
     filename = args[1]
 
-    
-    
-    # Connect to the port on localhost
     host = f"""mongodb://localhost:{port}"""
+    os.system(f'mongoimport -d 291db -c dblp --drop --file {filename} --uri "{host}"')
+    
+    
+    # Connect to the port on localhost    
     client = MongoClient(host)
 
-    os.system(f'mongoimport -d 291db -c dblp --drop --file {filename}')
+    
 
     # Create or open the 291db database on server.
     db = client["291db"]
