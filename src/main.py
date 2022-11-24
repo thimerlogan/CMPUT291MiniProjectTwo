@@ -81,10 +81,10 @@ def main(args):
                 selectionDict[count] = key
                 print(count, '|' , key,'|', len(value))
                 count = count + 1
-            print(count + 1, "| Exit")
+            print(count, "| Exit")
                 
             n = int(getInput("Author: ", "Must make a selection"))
-            if(n == count + 1):
+            if(n == count):
                 continue
             
             
