@@ -78,8 +78,16 @@ def main(args):
            
         elif userInput == 3:
             n = int(getInput("Number of Venues: ", "Must make a selection"))
-            venues = venueSearch.findVenues(n, collection)
-            print(venues)
+            venues = venueSearch.findVenues(n, collection, db, client)
+            i = 0
+            for venue in venues:
+                if (i == n):
+                    continue
+                
+                if (venue['_id']['venue'] != ""):    
+                    print(venue['_id']['venue'], "| Count -", venue['venCount'], "| RefCount -" , len(venue['combined']))
+                    i = i + 1
+           
            
         elif userInput == 4:
             uniqueId = getInput("Enter a unique ID: ", "Must enter a unique ID")
