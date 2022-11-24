@@ -74,8 +74,24 @@ def main(args):
         elif userInput == 2:
             keyword = getInput("Author Name: ", "Must make a selection")
             authors = authorSearch.findAuthors(keyword, collection)
-            print (authors)
-           
+            
+            count: int = 1
+            selectionDict: dict = {}
+            for key, value in authors.items():
+                selectionDict[count] = key
+                print(count, '|' , key,'|', len(value))
+                count = count + 1
+            print(count + 1, "| Exit")
+                
+            n = int(getInput("Author: ", "Must make a selection"))
+            if(n == count + 1):
+                continue
+            
+            
+            selected = sorted(authors[selectionDict[n]], key=lambda d: d['year'], reverse=True) 
+            for publication in selected:
+                print(publication["title"], '|', publication["year"], '|', publication["venue"])
+                
         elif userInput == 3:
             n = int(getInput("Number of Venues: ", "Must make a selection"))
             venues = venueSearch.findVenues(n, collection, db, client)
